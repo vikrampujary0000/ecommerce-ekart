@@ -1,0 +1,11 @@
+<div class="addPadding py-10">
+    <div class="flex flex-wrap gap-2">
+        @for(product of wishlistService.wishlist;track $index){
+        <div class="shadow">
+            <app-product-card [product]="product"></app-product-card>
+        </div>
+        }@empty {
+        <h4>No items in wishlist</h4>
+        }
+    </div>
+</div>

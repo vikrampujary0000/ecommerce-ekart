@@ -1,0 +1,81 @@
+<div class="flex flex-col items-center px-40 mt-10">
+    @if(isEdit){
+    <h1>Update Product</h1>
+    }@else{
+    <h1>Add New Product</h1>
+    }
+    <form class="shadow p-4" [formGroup]="productForm">
+        <div class="flex flex-wrap">
+            <div class="w-full">
+                <mat-form-field class="w-full">
+                    <mat-label>Category</mat-label>
+                    <mat-select formControlName="categoryId">
+                        @for(category of categories;track category;let i = $index){
+                        <mat-option [value]="category._id">{{category.name}}</mat-option>
+                        }
+                    </mat-select>
+                </mat-form-field>
+                <mat-form-field class="w-full">
+                    <mat-label>Brand</mat-label>
+                    <mat-select formControlName="brandId">
+                        @for(brand of brands;track brand;let i = $index){
+                        <mat-option [value]="brand._id">{{brand.name}}</mat-option>
+                        }
+                    </mat-select>
+                </mat-form-field>
+                <mat-form-field class="w-full">
+                    <mat-label>Name</mat-label>
+                    <input type="text" name="name" matInput formControlName="name">
+                </mat-form-field>
+                <mat-form-field class="w-full">
+                    <mat-label>Short Description</mat-label>
+                    <input type="text" name="shortDescription" matInput formControlName="shortDescription">
+                </mat-form-field>
+                <mat-form-field class="w-full">
+                    <mat-label>Description</mat-label>
+                    <textarea type="text" name="description" matInput formControlName="description" rows="5"></textarea>
+                </mat-form-field>
+                <mat-form-field class="w-full">
+                    <mat-label>Price</mat-label>
+                    <input type="number" name="price" matInput formControlName="price">
+                </mat-form-field>
+                <mat-form-field class="w-full">
+                    <mat-label>Discount</mat-label>
+                    <input type="number" name="discount" matInput formControlName="discount">
+                </mat-form-field>
+                <div class="w-full flex gap-8">
+                    <mat-checkbox formControlName="isFeaturedProduct"><mat-label class="chklabel">Featured</mat-label>
+                    </mat-checkbox>
+                    <mat-checkbox formControlName="isNewProduct"><mat-label
+                            class="chklabel">New</mat-label></mat-checkbox>
+                </div>
+                <div class="flex w-full flex-col" formArrayName="images">
+                    <div class="flex justify-between">
+                        <h4>Images</h4>
+                        <button mat-raised-button color="primary" (click)="addImage()">Add Image</button>
+                    </div>
+                    @for(image of images.controls; track image; let i = $index){
+                    <mat-form-field class="w-full">
+                        <mat-label>Image {{ i + 1 }}</mat-label>
+                        <div class="flex justify-between">
+                            <input type="text" name="image" matInput [formControlName]="i">
+                            <button mat-raised-button color="warn" (click)="removeImage(i)">
+                                Remove
+                            </button>
+                        </div>
+                    </mat-form-field>
+                    }
+                </div>
+            </div>
+            <div class="w-full flex justify-center mt-4">
+                @if(isEdit){
+                <button mat-raised-button color="primary" [disabled]="productForm.invalid"
+                    (click)="updateProduct()">Update</button>
+                }@else{
+                <button mat-raised-button color="primary" [disabled]="productForm.invalid"
+                    (click)="addProduct()">Add</button>
+                }
+            </div>
+        </div>
+    </form>
+</div>

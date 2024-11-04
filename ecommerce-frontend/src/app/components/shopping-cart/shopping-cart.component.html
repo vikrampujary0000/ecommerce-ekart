@@ -1,0 +1,141 @@
+@if(orderStep==0){
+<div class="container mx-auto p-8 bg-white rounded-lg shadow-md">
+    <h1 class="text-3xl font-bold mb-8 text-gray-800">Shopping Cart</h1>
+
+    <div class="flex flex-col lg:flex-row gap-8">
+        <div class="w-full lg:w-3/4">
+            @for(item of cartItems; track $index){
+            <div class="mb-6 shadow-lg rounded-lg p-6 bg-gray-50">
+                <div class="flex items-center justify-between border-b pb-4">
+                    <img mat-card-image [src]="item.product.images[0]" alt="Product Image"
+                        class="w-24 h-24 object-cover rounded-md shadow-sm border border-gray-200" />
+
+                    <div class="flex flex-col flex-1 ml-4 mr-4">
+                        <h2 class="text-xl font-semibold  text-gray-700">{{ item.product.name }}</h2>
+                        <p class="text-gray-500 text-sm  mt-1">{{ item.product.description }}</p>
+
+                        <div class="flex items-center mt-3 space-x-3">
+                            <span class="text-gray-500 text-sm">Quantity:</span>
+                            <div class="flex items-center space-x-2">
+                                <button mat-mini-fab color="primary" [disabled]="item.quantity==1"
+                                    (click)="addToCart(item.product._id!,-1)"
+                                    class="bg-gray-200 text-gray-700 hover:bg-gray-300">-</button>
+                                <span class="text-lg font-semibold text-gray-700">{{ item.quantity }}</span>
+                                <button mat-mini-fab color="primary" (click)="addToCart(item.product._id!,1)"
+                                    class="bg-gray-200 text-gray-700  hover:bg-gray-300">+</button>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="text-right">
+                        <div class="flex justify-between items-center ">
+                            <span *ngIf="item.product.discount > 0" class="text-green-600">
+                                ₹{{ sellingPrice(item.product)
+                                }}
+                            </span>
+                            <span *ngIf="item.product.discount > 0" class="text-sm text-gray-500 ml-2">
+                                ({{ item.product.discount }}% off)
+                            </span>
+                            <span class="text-red-600 line-through" *ngIf="item.product.discount > 0">
+                                ₹{{ item.product.price }}
+                            </span>
+                            <span *ngIf="!item.product?.discount || item.product?.discount === 0">
+                                ₹{{ item.product.price }}
+                            </span>
+                        </div>
+                        <div class="mt-1 text-gray-800 font-semibold"> ₹{{sellingPrice(item.product) * item.quantity
+                            }}</div>
+                        <button mat-button color="warn" (click)="removeFromCart(item)"
+                            class="mt-4 text-sm underline">Remove</button>
+                    </div>
+                </div>
+            </div>
+            }
+        </div>
+
+        <div class="w-full lg:w-1/4">
+            <div class="shadow-lg p-6 rounded-lg bg-gray-100">
+                <h2 class="text-2xl font-semibold mb-4 text-gray-700">Order Summary</h2>
+
+                <div class="flex justify-between mb-2">
+                    <span class="text-gray-600">Subtotal</span>
+                    <span class="font-semibold text-gray-800">₹{{ subtotal }}</span>
+                </div>
+                <div class="flex justify-between mb-2">
+                    <span class="text-gray-600  text-gray-800">Shipping</span>
+                    <span class="font-semibold">₹{{ shipping }}</span>
+                </div>
+                <div class="flex justify-between mb-4">
+                    <span class="text-gray-600">Tax</span>
+                    <span class="font-semibold  text-gray-800">₹{{ tax }}</span>
+                </div>
+                <div class="flex justify-between text-lg font-bold mb-4 border-t pt-4">
+                    <span>Total</span>
+                    <span class="text-gray-900">₹{{ total }}</span>
+                </div>
+                <button mat-flat-button color="primary" class="w-full py-2 text-lg font-medium" [disabled]="!total"
+                    (click)="checkout()">Proceed to
+                    Checkout</button>
+                @if(!total){
+                <button class="text-lg px-4 py-2 mt-2 text-blue-600 hover:underline" mat-flat-button
+                    routerLink="">Continue
+                    Shopping...</button>
+                }
+            </div>
+        </div>
+    </div>
+</div>
+}@else if(orderStep==1){
+<div class="container mx-auto p-8 bg-white rounded-lg shadow-md">
+    <h1 class="text-3xl font-bold mb-8 text-gray-800">Your Order Address</h1>
+    <form [formGroup]="addressForm" class="space-y-6">
+
+        <mat-form-field class="w-full">
+            <mat-label>Address Line 1</mat-label>
+            <input matInput id="addressLine1" type="text" placeholder="Enter your Address" formControlName="address1"
+                required />
+        </mat-form-field>
+
+        <mat-form-field class="w-full">
+            <mat-label>Address Line 1</mat-label>
+            <input matInput id="addressLine2" type="text" placeholder="Enter your Address" formControlName="address2"
+                required />
+        </mat-form-field>
+
+        <mat-form-field class="w-full">
+            <mat-label>City</mat-label>
+            <input matInput id="city" type="text" placeholder="Enter your City" formControlName="city" required />
+        </mat-form-field>
+
+        <mat-form-field class="w-full">
+            <mat-label>PinCode</mat-label>
+            <input matInput id="pincode" type="text" placeholder="Enter your Pincode" formControlName="pincode"
+                required />
+        </mat-form-field>
+
+
+        <div class="text-center">
+            <button mat-raised-button color="primary" type="submit" class="px-6 py-3 font-bold" (click)="addAddress()"
+                [disabled]="addressForm.invalid">
+                Submit Address and continue
+            </button>
+        </div>
+    </form>
+</div>
+}@else if (orderStep==2) {
+<div class="container mx-auto p-8 bg-white rounded-lg shadow-md">
+    <h1 class="text-3xl font-bold mb-8 text-gray-800">Select Payment Method</h1>
+    <div class="p-6 shadow-md bg-gray-50 rounded-md">
+        <mat-radio-group color="primary" [(ngModel)]="paymentType" class="space-y-4">
+            <mat-radio-button value="cash" class="text-lg text-gray-800">Cash</mat-radio-button>
+            <mat-radio-button value="online" [disabled]="true" class="text-lg text-gray-800">Online
+                Payment</mat-radio-button>
+        </mat-radio-group>
+    </div>
+    <div class="text-center mt-8">
+        <button mat-raised-button color="primary" type="submit" class="px-6 py-3 font-bold" (click)="completeOrder()">
+            Continue
+        </button>
+    </div>
+</div>
+}

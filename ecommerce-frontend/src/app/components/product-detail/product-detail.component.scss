@@ -1,0 +1,22 @@
+.product-gallery {
+  //   width: 100%;
+  height: 30rem;
+  padding: 2rem;
+}
+
+button {
+  display: flex;
+  align-items: center; /* Align icon and text in the center */
+  justify-content: center; /* Center the content inside the button */
+  gap: 1rem; /* Adjust spacing between icon and text */
+}
+
+mat-icon {
+  font-size: 20px; /* You can adjust the size of the icon if needed */
+  vertical-align: middle; /* Ensure the icon is vertically aligned with the text */
+}
+
+span {
+  display: inline-block; /* Ensure the text stays inline with the icon */
+  vertical-align: middle; /* Vertically align the text with the icon */
+}

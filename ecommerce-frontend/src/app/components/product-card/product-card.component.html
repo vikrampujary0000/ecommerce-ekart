@@ -1,0 +1,36 @@
+<div class="product-card pb-2" [routerLink]="'/product/'+product._id">
+    <div class="product-image">
+        <img [src]="product.images[0]" alt="{{product.name}}">
+    </div>
+    <div class="product-details">
+        <h3 class="product-title">{{ product.name }}</h3>
+        <p class="product-description">{{ product.shortDescription }}</p>
+        <div class="price-info">
+            @if(product.discount){
+            <span class="product-discount">
+                ₹{{ (product.price - (product.price * product.discount /
+                100)).toFixed(0) }}
+            </span>
+            <span class="text-sm">{{'('+product.discount+' %off)'}}</span>
+            }
+            <span class="product-price">₹{{ product.price }}</span>
+        </div>
+        @if(!authService.isAdmin){
+        <div class="button-container">
+            <button mat-fab color=" warn" aria-label="Add to Wishlist" (click)="onClickWishlist(product,$event)">
+
+                <mat-icon class="text-red-500">
+                    {{ isInWishlist(product) ? 'favorite' : 'favorite_border' }}
+                </mat-icon>
+
+            </button>
+            <button mat-fab color="primary" aria-label="Toggle Cart" (click)="addToCart(product,$event)">
+                @if(isProductInCart(product._id!)){
+                <mat-icon>'remove_shopping_cart'</mat-icon>
+                }@else{
+                <mat-icon>'add_shopping_cart'</mat-icon>
+                }
+            </button>
+        </div>}
+    </div>
+</div>

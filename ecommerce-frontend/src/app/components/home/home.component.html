@@ -1,0 +1,29 @@
+<div class="px-20 mt-4">
+    <div class="shadow p-4">
+        <owl-carousel-o [options]="customOptions">
+            @for (image of bannerImages; track $index) {
+            <ng-template carouselSlide flex>
+                <div class="flex items-center">
+                    <img class="p-4" [src]="image.images[0]" alt="images">
+                </div>
+            </ng-template>}
+        </owl-carousel-o>
+    </div>
+
+    <div class="p-8">
+        <h4 class=" text-2xl font-bold">Featured Products</h4>
+        <div class="flex flex-wrap gap-1 px-10">
+            @for(featuredProduct of featuredProducts; track $index){
+            <app-product-card [product]="featuredProduct"></app-product-card>
+            }
+        </div>
+    </div>
+    <div class="p-8">
+        <h4 class="text-2xl font-bold">New Products</h4>
+        <div class="flex flex-wrap gap-1 px-10">
+            @for(newProduct of newProducts; track $index){
+            <app-product-card [product]="newProduct"></app-product-card>
+            }
+        </div>
+    </div>
+</div>
